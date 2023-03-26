@@ -14,6 +14,7 @@ import{
     CREATE_ENTRY_SUCCESS ,
     CREATE_ENTRY_FAIL ,
     CLEAR_VALUES,
+    SET_DASHBOARD,
     
     } from './actions'
 
@@ -36,6 +37,13 @@ const reducer = (state, action)=>{
                 alertType: '',
                 alertText: '',
         }
+    }
+
+    if(action.type === SET_DASHBOARD){
+      return{
+        ...state,
+        isDashboard:true
+      }
     }
 
     if(action.type === LOGIN_REQUEST){

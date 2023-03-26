@@ -37,9 +37,6 @@ const AddEntry = () => {
 
   const handleSubmit = async (e)=>{
     e.preventDefault()
-    // setImage(await handleChangeImage())
-    // const imageUrl = await handleChangeImage()
-    // setImage(imageUrl)
     await handleChangeImage()
     
     if(!title || !description || !image || !customerWebsite){

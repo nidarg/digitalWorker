@@ -8,7 +8,7 @@ import Logo from './Logo'
 
 const Navbar = () => {
   const[showLogout, setShowLogout] = useState(false)
-  const {user,logout} = useAppContext()
+  const {user,logout,setDashboard} = useAppContext()
   return (
     <Wrapper>
       <nav className="nav">
@@ -33,10 +33,14 @@ const Navbar = () => {
                 </button>
               </div>
             </div>
-            <Link to='/dashboard'className="btn"> Back to Dashboard</Link>
+            <Link to='/dashboard'><button onClick={setDashboard} className="btn">
+              Back to Dashboard
+              </button> </Link>
             </div>
           ):(
-            <Link to='/dashboard' className="btn">Dashboard</Link>
+            <Link to='/dashboard' ><button onClick={setDashboard}className="btn">
+           Dashboard
+            </button></Link>
           )}
         </div>
         

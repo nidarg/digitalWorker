@@ -16,7 +16,8 @@ GET_ENTRIES_FAIL,
 CREATE_ENTRY_REQUEST ,
 CREATE_ENTRY_SUCCESS ,
 CREATE_ENTRY_FAIL ,
-CLEAR_VALUES
+CLEAR_VALUES,
+SET_DASHBOARD,
 
 } from './actions'
 
@@ -40,6 +41,7 @@ export const initialState = {
     isEditing:false,
     editEntrieId:'',
     entry:{},
+    isDashboard:false,
     }
 
     const AppContext = React.createContext()
@@ -68,6 +70,10 @@ export const initialState = {
         const removeUserFromLocalStorage = ()=>{
         localStorage.removeItem('user')
         localStorage.removeItem('token')
+        }
+
+        const setDashboard = ()=>{
+          dispatch({type: SET_DASHBOARD})
         }
 
         const loginUser = async(currentUser)=>{
