@@ -14,7 +14,13 @@ import{
     CREATE_ENTRY_SUCCESS ,
     CREATE_ENTRY_FAIL ,
     CLEAR_VALUES,
-    SET_DASHBOARD,
+    UPDATE_ENTRY_REQUEST,
+    UPDATE_ENTRY_SUCCESS, 
+    UPDATE_ENTRY_FAIL, 
+    GET_ENTRY_REQUEST, 
+    GET_ENTRY_SUCCESS ,
+    GET_ENTRY_FAIL,
+ 
     
     } from './actions'
 
@@ -39,13 +45,6 @@ const reducer = (state, action)=>{
         }
     }
 
-    if(action.type === SET_DASHBOARD){
-      return{
-        ...state,
-        isDashboard:true
-      }
-    }
-
     if(action.type === LOGIN_REQUEST){
         return{...state, isLoading:true}
     }
@@ -57,6 +56,7 @@ const reducer = (state, action)=>{
           token:action.payload.token,
           isLoading:false,
           showAlert:true,
+          isDashboard:true,
           alertType:'success',
           alertText:'Login Successful! Redirecting...'
         }
@@ -74,7 +74,7 @@ const reducer = (state, action)=>{
 
       if(action.type === LOGOUT){
         return{
-          ...initialState,
+          ...state,
           user:null,
           token:null,
         }
@@ -95,6 +95,28 @@ const reducer = (state, action)=>{
       }
 
       if (action.type ===  GET_ENTRIES_FAIL) {
+        return {
+          ...state,
+          isLoading: false,
+          showAlert: true,
+          alertType: 'danger',
+          alertText: action.payload.msg,
+        }
+      }
+
+      if(action.type === GET_ENTRY_REQUEST){
+        return {...state, isLoading:true, showAlert:false}
+      }
+      
+      if(action.type === GET_ENTRY_SUCCESS){
+        return{
+          ...state,
+          isLoading:false,
+          entry:action.payload
+        }
+      }
+      
+      if (action.type === GET_ENTRY_FAIL) {
         return {
           ...state,
           isLoading: false,
@@ -128,16 +150,44 @@ const reducer = (state, action)=>{
         }
       }
 
+      
+      if(action.type === UPDATE_ENTRY_REQUEST){
+        return {...state, isLoading:true}
+      }
+
+      if(action.type === UPDATE_ENTRY_SUCCESS){
+        const updatedEntry = action.payload
+        return{
+            ...state,
+            entries:state.entries.map(entry=>{
+                if(entry._id === updatedEntry._id){
+                    return updatedEntry
+                }
+                return entry
+            }),
+            isLoading:false,
+            showAlert:true,
+            alertType:'success',
+            alertText:'Entry Updated'
+        }
+
+      }
+      if (action.type === UPDATE_ENTRY_FAIL) {
+        return {
+          ...state,
+          isLoading: false,
+          showAlert: true,
+          alertType: 'danger',
+          alertText: action.payload.msg,
+        };
+      }
+
 
       if (action.type === CLEAR_VALUES) {
-        const initialState = {
-          isEditing: false,
-          editEntrieId:'',
-          snippet:{}
-        }
+      
         return {
             ...state,
-            ...initialState
+            entry:{}
         }
     }
 

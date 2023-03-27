@@ -17,7 +17,13 @@ CREATE_ENTRY_REQUEST ,
 CREATE_ENTRY_SUCCESS ,
 CREATE_ENTRY_FAIL ,
 CLEAR_VALUES,
-SET_DASHBOARD,
+UPDATE_ENTRY_REQUEST,
+UPDATE_ENTRY_SUCCESS, 
+UPDATE_ENTRY_FAIL, 
+GET_ENTRY_REQUEST, 
+GET_ENTRY_SUCCESS ,
+GET_ENTRY_FAIL,
+
 
 } from './actions'
 
@@ -72,10 +78,6 @@ export const initialState = {
         localStorage.removeItem('token')
         }
 
-        const setDashboard = ()=>{
-          dispatch({type: SET_DASHBOARD})
-        }
-
         const loginUser = async(currentUser)=>{
             dispatch({type:LOGIN_REQUEST})
             try {
@@ -122,6 +124,27 @@ export const initialState = {
             }
           }
 
+          const getEntry = async(id)=>{
+            dispatch({type:GET_ENTRY_REQUEST})
+            try {
+              const {data} = await axios.get(`/api/v1/entries/${id}`, {
+                headers:{
+                  Authorization:`Bearer ${token}`
+                }
+            })
+              const {entry} = data
+              dispatch({
+                type:GET_ENTRY_SUCCESS,
+                payload:entry
+              })
+            } catch (error) {
+              dispatch({
+                type: GET_ENTRY_FAIL,
+              payload: { msg: error.response.data.msg },
+              })
+            }
+          }
+
           const createEntry = async(currentEntry)=>{
     
             dispatch({type:CREATE_ENTRY_REQUEST})
@@ -147,6 +170,29 @@ export const initialState = {
               }
           }
 
+          const updateEntry = async ({entryId,title,description,image,customerWebsite}) => {
+            dispatch({ type: UPDATE_ENTRY_REQUEST });
+        
+            try {
+              const {data} = await axios.patch(`/api/v1/entries/${entryId}`,{title,description,image,customerWebsite},{
+                headers:{
+                    Authorization:`Bearer ${token}`
+                }
+              }) 
+              const {entry} = data
+        
+              dispatch({ type: UPDATE_ENTRY_SUCCESS,payload:entry});
+              dispatch({ type: CLEAR_VALUES });
+            } catch (error) {
+              if (error.response.status === 401) return;
+              dispatch({
+                type: UPDATE_ENTRY_FAIL,
+                payload: { msg: error.response.data.msg },
+              });
+            }
+            clearAlert();
+          };
+
           const clearValues = () => {
             dispatch({ type: CLEAR_VALUES });
           };
@@ -160,6 +206,8 @@ export const initialState = {
                 getEntries,
                 createEntry,
                 clearValues,
+                updateEntry,
+                getEntry,
 
             }}>{children}</AppContext.Provider>
         )

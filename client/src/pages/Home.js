@@ -15,7 +15,7 @@ const Home = () => {
     },[page])
   
     return (
-      <Wrapper>
+      <Wrapper >
         <div className='container'>
         {showAlert && <Alert/>}
         {isLoading && <Loading/>}
@@ -32,12 +32,37 @@ const Home = () => {
     )
   }
    
-  const Wrapper = styled.section`
+  const Wrapper = styled.div`
+  
 .container{
+  width:90vw;
+  margin:0 auto;
+  min-height:100vh;
   display:flex;
-  justify-content:center;
-  margin-top:4rem;
+  flex-direction:column;
+  align-items:center;
 }
+.entries{
+  margin-top:30rem;
+  width:100%;
+  display:grid;
+  grid-template-rows: 1fr; 
+  justify-items:center;
+  align-items:center;
+  row-gap:4rem;
+}
+
+@media screen and (min-width: 768px){
+   .entries{
+    margin-top:15rem;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    
+    col-gap:4rem;
+   }
+    
+}
+
 `
 
 export default Home

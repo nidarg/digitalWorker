@@ -1,35 +1,18 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useAppContext } from '../context/appContext'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+
 
 const Entry = ({_id,title,description,image,customerWebsite}) => {
-  const navigate = useNavigate()
-  const {isDashboard} = useAppContext()
-
-  const handleUpdateEntry = ()=>{
-    navigate(`/edit-entry/${_id}`)
-  }
-
-  const handleHideEntry = ()=>{
-    
-  }
-
-  const handleDeleteEntry = ()=>{
-    
-  }
-
-
+  
   return (
     <Wrapper>
-      <div className={isDashboard ? 'dashboard-entry' : 'entry'}>
-        <img src={image} alt="image" />
-        <p className='title'>{title}</p>
-        <p className={isDashboard ? 'not-show' : 'description'}>{description}</p>
-        <p className="customerWebsite">{customerWebsite}</p>
-        <button onClick={handleUpdateEntry} className={isDashboard ? 'btn' : 'not-show'}>Update Entry</button>
-        <button onClick={handleHideEntry}  className={isDashboard ? 'btn' : 'not-show'}>Hide Entry</button>
-        <button onClick={handleDeleteEntry}  className={isDashboard ? 'btn' : 'not-show'}>Delete Entry</button>
+      <div className='entry'>
+        <img src={image} alt="" />
+        <h5 className='title'>{title}</h5>
+        <p className='description'>{description}</p>
+        <Link to={{customerWebsite}}target="_blank">
+          <button className='btn btn-full-width'>{customerWebsite}</button></Link>
       </div>
     </Wrapper>
     
@@ -37,28 +20,42 @@ const Entry = ({_id,title,description,image,customerWebsite}) => {
 }
 
 const Wrapper = styled.section`
-
-img{
-  object-fit: cover;
+.entry{
+  background:var(--white);
+  min-width:80vw;
+  max-height:25rem;
+display:grid;
+grid-template-columns:1fr;
+padding:1rem;
 }
-  .dashboard-entry,
-  .entry{
-    background:var(--white);
-    width:30rem;
-    height:20rem;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center
-    
-  }
+img{
+  width:100%;
+  height:15rem;
+  object-fit:cover;
+}
 
-  @media(min-width:768px){
-   
-    .dashboard-entry{
-      flex-direction: row;
-    }
+.title{
+  text-align:center;
+  font-weight:700;
+}
+
+.description{
+  font-size:var(--small-text);
+}
+
+
+@media screen and (min-width: 1120px){
+  .entry{
+   min-width:45vw;
   }
+  
+}
+@media screen and (min-width: 768px){
+  .entry{
+   min-width:40vw;
+  }
+  
+}
 
 `
 

@@ -107,6 +107,11 @@ const Wrapper = styled.section`
   .btn {
     margin-top: 1rem;
   }
+  @media screen and (max-width: 768px){
+    .form{
+      margin-top:30rem;
+    }
+  }
 
 `
 

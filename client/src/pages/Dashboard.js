@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { useAppContext } from '../context/appContext'
-import { Alert,Entry,Loading } from '../components'
+import { Alert,DashboardEntry,Loading } from '../components'
 
 const Dashboard = () => {
   const {getEntries, isLoading, entries, showAlert} = useAppContext()
@@ -25,7 +25,7 @@ const Dashboard = () => {
         </div>
         <div className="entries">
           {entries.map(entry=>{
-            return <Entry key={entry._id} {...entry}/>
+            return <DashboardEntry key={entry._id} {...entry}/>
           })}
         </div>
       </div>
@@ -35,26 +35,42 @@ const Dashboard = () => {
 
 const Wrapper = styled.section`
 .container{
+  width:90vw;
+  margin:0 auto;
+  min-height:100vh;
   display:flex;
-  justify-content:center;
-  margin-top:4rem;
+  flex-direction:column;
+  align-items:center;
+ 
 }
+
+.add-entry{
+  margin-top:30rem;
+}
+
+.entries{
+  margin-top:5rem;
+  width:100%;
+  display:grid;
+  grid-template-rows: 1fr; 
+  justify-items:center;
+  align-items:center;
+  row-gap:10rem;
+}
+
+@media screen and (min-width: 768px){
   .add-entry{
-    background:var(--primary-medium)
+    margin-top:10rem;
   }
-
-  .entries{
+   .entries{
+    margin-top:5rem;
     display:grid;
-    grid-template-columns:1fr;
-  }
-
-  @media(min-width:768px){
-   
-    .entries{
-      grid-template-rows:1fr;
-    }
-  }
-
+    grid-template-rows: 1fr ;
+    
+    row-gap:2rem;
+   }
+    
+}
 `
 
 export default Dashboard
