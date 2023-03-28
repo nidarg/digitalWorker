@@ -6,12 +6,14 @@ import { Alert,Entry,Loading } from '../components'
 
 const Home = () => {
   
-    const {getEntries, isLoading, entries, showAlert,page} = useAppContext()
+    const {getEntries, isLoading, entries, showAlert,page,hide,getFilteredEntries} = useAppContext()
     const navigate = useNavigate()
     
     useEffect(()=>{
        // eslint-disable-next-line
-      getEntries()
+       
+        getEntries()
+       
     },[page])
   
     return (
@@ -47,7 +49,7 @@ const Home = () => {
   width:100%;
   display:grid;
   grid-template-rows: 1fr; 
-  justify-items:center;
+  // justify-items:center;
   align-items:center;
   row-gap:4rem;
 }
@@ -57,8 +59,7 @@ const Home = () => {
     margin-top:15rem;
     display:grid;
     grid-template-columns: 1fr 1fr;
-    
-    col-gap:4rem;
+    column-gap:4rem;
    }
     
 }

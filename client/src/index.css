@@ -155,6 +155,8 @@ ul {
   transition: var(--transition);
   text-transform: capitalize;
   display: inline-block;
+  text-align:center;
+  font-family: var(--headingFont);
 }
 .btn:hover {
   background: var(--primary-dark);

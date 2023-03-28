@@ -1,22 +1,29 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useAppContext } from '../context/appContext'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
-const DashboardEntry = ({_id,title,description,image,customerWebsite}) => {
+const DashboardEntry = ({_id,title,image}) => {
   const navigate = useNavigate()
-  
+  const{deleteEntry,hide} = useAppContext()
 
-  const handleUpdateEntry = ()=>{
-    navigate(`/edit-entry/${_id}`)
+  const hideEntry = ()=>{
+    hide(_id)
+    setTimeout(()=>{
+      navigate('/')
+      window.location.reload(false);
+    },)
   }
-
-  const handleHideEntry = ()=>{
+  const showEntry = ()=>{
     
   }
 
   const handleDeleteEntry = ()=>{
-    
+    deleteEntry(_id)
+    setTimeout(()=>{
+      navigate('/dashboard')
+      window.location.reload(false);
+    },)
   }
 
 
@@ -24,12 +31,16 @@ const DashboardEntry = ({_id,title,description,image,customerWebsite}) => {
     <Wrapper>
       <div className='dashboard-entry' >
         <img src={image} alt="" />
+        <div className="title-container">
         <p className='title'>{title}</p>
+        </div>
+        
         {/* <p className='description'>{description}</p> */}
         {/* <p className="customerWebsite">{customerWebsite}</p> */}
-        <button onClick={handleUpdateEntry} className='btn'>Update Entry</button>
-        <button onClick={handleHideEntry}  className='btn'>Hide Entry</button>
-        <button onClick={handleDeleteEntry}  className='btn'>Delete Entry</button>
+        <Link className='btn' to={`/edit-entry/${_id}`}>Update Entry</Link>
+        <button onClick={hideEntry}  className='btn'>Hide Entry</button>
+        <button onClick={showEntry}  className='btn'>Show Entry</button>
+        <button onClick={handleDeleteEntry}  className='btn btn-danger'>Delete Entry</button>
       </div>
     </Wrapper>
     
@@ -43,8 +54,8 @@ const Wrapper = styled.section`
     max-height:35rem;
   display:grid;
   grid-template-columns:1fr;
-  padding:1rem;
   row-gap:.5rem;
+  padding:1rem;
   }
   img{
     width:100%;
@@ -53,21 +64,32 @@ const Wrapper = styled.section`
   }
   
   .title{
-    text-align:center;
     font-weight:700;
   }
-    
+  p{
+    margin-bottom:0;
   }
+    
+  .btn,
+  .title-container{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:var(--smal-text);
+    font-weight:400;
+  }
+  
   @media screen and (min-width: 768px){
     .dashboard-entry{
      max-height:5rem;
      display:grid;
-     grid-template-columns:2fr 1fr 1fr 1fr 1fr;
+     grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr;
      padding:.5rem;
      column-gap:.5rem;
     }
     img{
         height:4rem;
+        object-fit:cover;
     }
   }
 

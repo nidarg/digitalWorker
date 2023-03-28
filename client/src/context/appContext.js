@@ -23,7 +23,11 @@ UPDATE_ENTRY_FAIL,
 GET_ENTRY_REQUEST, 
 GET_ENTRY_SUCCESS ,
 GET_ENTRY_FAIL,
-
+DELETE_ENTRY_REQUEST, 
+DELETE_ENTRY_SUCCESS ,
+DELETE_ENTRY_FAIL,
+HIDE_ENTRY,
+FILTER_ENTRIES
 
 } from './actions'
 
@@ -44,10 +48,13 @@ export const initialState = {
     numPages:1,
     totalEntries:0,
     entries:[],
+    dashboardEntries:[],
+    filteredEntries:[],
     isEditing:false,
     editEntrieId:'',
     entry:{},
     isDashboard:false,
+    hide:false,
     }
 
     const AppContext = React.createContext()
@@ -124,6 +131,10 @@ export const initialState = {
             }
           }
 
+          // const getFilteredEntries = ()=>{
+          //   dispatch({type:FILTER_ENTRIES})
+          // }
+
           const getEntry = async(id)=>{
             dispatch({type:GET_ENTRY_REQUEST})
             try {
@@ -193,6 +204,32 @@ export const initialState = {
             clearAlert();
           };
 
+
+          const deleteEntry = async (id) => {
+            dispatch({ type: DELETE_ENTRY_REQUEST });
+        
+            try {
+              await axios.delete(`/api/v1/entries/${id}`,
+              {
+                headers:{
+                    Authorization:`Bearer ${token}`
+                }
+              }) 
+              dispatch({ type: DELETE_ENTRY_SUCCESS});
+              
+            } catch (error) {
+              dispatch({
+                type: DELETE_ENTRY_FAIL,
+                payload: { msg: error.response.data.msg },
+              });
+            }
+            
+          };
+
+          const hide = (id)=>{
+            dispatch({type:HIDE_ENTRY, payload:id})
+          }
+
           const clearValues = () => {
             dispatch({ type: CLEAR_VALUES });
           };
@@ -208,6 +245,9 @@ export const initialState = {
                 clearValues,
                 updateEntry,
                 getEntry,
+                deleteEntry,
+                hide,
+                // getFilteredEntries
 
             }}>{children}</AppContext.Provider>
         )

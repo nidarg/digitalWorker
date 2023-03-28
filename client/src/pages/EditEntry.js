@@ -20,7 +20,7 @@ const EditEntry = () => {
   
 
   const [image,setImage] = useState(entry.image)
-  const[isUploaded, setIsUploaded] = useState(false)
+  const[isAdded, setIsAdded] = useState(false)
   const [title,setTitle] = useState(entry.title)
   const [description,setDescription] = useState(entry.description)
   const [customerWebsite,setCustomerWebsite] = useState(entry.customerWebsite)
@@ -36,7 +36,8 @@ const EditEntry = () => {
       })
       // return data
       setImage(data)
-      setIsUploaded(true)
+      
+      setIsAdded(true)
     } catch (error) {
       setImage('')
     }
@@ -46,22 +47,21 @@ const EditEntry = () => {
     e.preventDefault()
     await handleChangeImage()
     
-    if(!title || !description || !image || !customerWebsite){
+    if(!entry._id || !entry.title || !entry.description || !entry.image || !entry.customerWebsite){
       displayAlert()
       return
     }
-    updateEntry({entryId,title,description,image,customerWebsite})
     setTimeout(()=>{
       navigate('/dashboard')
-      window.location.reload(false);
+      // window.location.reload(false);
     },2000)
   }
 
-  // useEffect(()=>{
-  //   console.log(image);
-  //   updateEntry({entryId,title,description,image,customerWebsite})
-    
-  // },[isUploaded])
+  useEffect(()=>{
+    if(isAdded){
+      updateEntry({entryId,title,description,image,customerWebsite})
+    }
+  },[isAdded])
 
   return (
     <Wrapper>
@@ -70,11 +70,11 @@ const EditEntry = () => {
         {showAlert && <Alert/>}
         <div className="form-row">
           <label className='form-label' htmlFor="title">Title</label>
-          <input id="title" name="title"className='form-input' type="text" value={title} onChange={(e)=>setTitle(e.target.value)} />
+          <input id="title" name="title"className='form-input' type="text" value={entry.title || ''} onChange={(e)=>setTitle(e.target.value)} />
         </div>
         <div className="form-row">
           <label className='form-label'  htmlFor="description">Description</label>
-          <input name="description" id = "description" className='form-input' type="text" value={description} onChange={(e)=>setDescription(e.target.value)} />
+          <input name="description" id = "description" className='form-input' type="text" value={entry.description || ''} onChange={(e)=>setDescription(e.target.value)} />
         </div>
 
 
@@ -90,7 +90,7 @@ const EditEntry = () => {
 
         <div className="form-row">
           <label className='form-label'  htmlFor="customerWebsite">Customer Website</label>
-          <input name="customerWebsite" id = "customerWebsite" className='form-input' type="text" value={customerWebsite} onChange={(e)=>setCustomerWebsite(e.target.value)} />
+          <input name="customerWebsite" id = "customerWebsite" className='form-input' type="text" value={entry.customerWebsite || ''} onChange={(e)=>setCustomerWebsite(e.target.value)} />
         </div>
 
 

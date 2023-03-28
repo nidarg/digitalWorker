@@ -1,6 +1,6 @@
 import {useState,useEffect}from 'react'
 import { useNavigate } from 'react-router-dom'
-import {Alert} from '../components'
+import {Alert,Loading} from '../components'
 import styled from 'styled-components'
 import { useAppContext } from '../context/appContext'
 import axios from 'axios'
@@ -14,7 +14,7 @@ const AddEntry = () => {
   const [description,setDescription] = useState('')
   const [customerWebsite,setCustomerWebsite] = useState('')
   // const [values, setValues] = useState(initialState)
-  const {isLoading, showAlert, createEntry, displayAlert} = useAppContext()
+  const {isLoading, showAlert, createEntry, displayAlert,getEntries} = useAppContext()
 
   const navigate = useNavigate()
 
@@ -30,6 +30,11 @@ const AddEntry = () => {
       // return data
       setImage(data)
       setIsUploaded(true)
+      setTimeout(()=>{
+       
+        navigate('/dashboard')
+        window.location.reload(false);
+      },)
     } catch (error) {
       setImage('')
     }
@@ -43,15 +48,16 @@ const AddEntry = () => {
       displayAlert()
       return
     }
-    setTimeout(()=>{
-      navigate('/dashboard')
-      window.location.reload(false);
-    },2000)
+    
   }
 
   useEffect(()=>{
     console.log(image);
-    createEntry({title,description,image,customerWebsite})
+    if(isUploaded){
+      createEntry({title,description,image,customerWebsite})
+      
+    }
+    
     
   },[isUploaded])
 
@@ -60,6 +66,7 @@ const AddEntry = () => {
       <form onSubmit={handleSubmit} className="form">
         <h3>Add Entry</h3>
         {showAlert && <Alert/>}
+        {isLoading && <Loading/>}
         <div className="form-row">
           <label className='form-label' htmlFor="title">Title</label>
           <input id="title" name="title"className='form-input' type="text" value={title} onChange={(e)=>setTitle(e.target.value)} />

@@ -5,7 +5,7 @@ import { useAppContext } from '../context/appContext'
 import { Alert,DashboardEntry,Loading } from '../components'
 
 const Dashboard = () => {
-  const {getEntries, isLoading, entries, showAlert} = useAppContext()
+  const {getEntries, isLoading, dashboardEntries, showAlert} = useAppContext()
   const navigate = useNavigate()
   const addEntry = ()=>{
     navigate('/add-entry')
@@ -24,7 +24,7 @@ const Dashboard = () => {
           <button onClick={addEntry} className="btn">Add New Entry</button>
         </div>
         <div className="entries">
-          {entries.map(entry=>{
+          {dashboardEntries.map(entry=>{
             return <DashboardEntry key={entry._id} {...entry}/>
           })}
         </div>
@@ -45,7 +45,7 @@ const Wrapper = styled.section`
 }
 
 .add-entry{
-  margin-top:30rem;
+  margin-top:25rem;
 }
 
 .entries{
@@ -53,7 +53,7 @@ const Wrapper = styled.section`
   width:100%;
   display:grid;
   grid-template-rows: 1fr; 
-  justify-items:center;
+  // justify-items:center;
   align-items:center;
   row-gap:10rem;
 }

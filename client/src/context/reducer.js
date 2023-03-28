@@ -20,7 +20,11 @@ import{
     GET_ENTRY_REQUEST, 
     GET_ENTRY_SUCCESS ,
     GET_ENTRY_FAIL,
- 
+    DELETE_ENTRY_REQUEST, 
+    DELETE_ENTRY_SUCCESS ,
+    DELETE_ENTRY_FAIL,
+    HIDE_ENTRY,
+    FILTER_ENTRIES,
     
     } from './actions'
 
@@ -89,6 +93,7 @@ const reducer = (state, action)=>{
           ...state,
           isLoading:false,
           entries:action.payload.entries,
+          dashboardEntries:action.payload.entries,
           totalEntries:action.payload.totalEntries,
           numPages : action.payload.numPages
         }
@@ -134,6 +139,7 @@ const reducer = (state, action)=>{
         return {
             ...state, 
             entries:[...state.entries,action.payload],
+            dashboardEntries:[...state.dashboardEntries,action.payload],
             isLoading:false,
             showAlert:true,
             alertType:'success',
@@ -165,6 +171,12 @@ const reducer = (state, action)=>{
                 }
                 return entry
             }),
+            dashboardEntries:state.dashboardEntries.map(entry=>{
+              if(entry._id === updatedEntry._id){
+                  return updatedEntry
+              }
+              return entry
+          }),
             isLoading:false,
             showAlert:true,
             alertType:'success',
@@ -182,6 +194,44 @@ const reducer = (state, action)=>{
         };
       }
 
+      if(action.type === DELETE_ENTRY_REQUEST){
+        return {...state, isLoading:true}
+      }
+
+      if(action.type === DELETE_ENTRY_SUCCESS){
+        return{
+            ...state,
+            isLoading:false,
+            showAlert:true,
+            alertType:'success',
+            alertText:'Entry deleted!'
+        }
+
+      }
+      if (action.type === DELETE_ENTRY_FAIL) {
+        return {
+          ...state,
+          isLoading: false,
+          showAlert: true,
+          alertType: 'danger',
+          alertText: action.payload.msg,
+        };
+      }
+
+      if(action.type === HIDE_ENTRY){
+        return{
+          ...state,
+          hide:true,
+          filteredEntries:state.entries.filter(entry=>entry._id !== action.payload)
+        }
+      }
+
+      // if(action.type === FILTER_ENTRIES){
+      //   return{
+      //     ...state,
+      //     entries:state.filteredEntries
+      //   }
+      // }
 
       if (action.type === CLEAR_VALUES) {
       
