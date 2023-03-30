@@ -5,7 +5,7 @@ import { useAppContext } from '../context/appContext'
 import { Alert,DashboardEntry,Loading } from '../components'
 
 const Dashboard = () => {
-  const {getEntries, isLoading, dashboardEntries, showAlert} = useAppContext()
+  const {getEntries, isLoading, entries, showAlert} = useAppContext()
   const navigate = useNavigate()
   const addEntry = ()=>{
     navigate('/add-entry')
@@ -24,7 +24,7 @@ const Dashboard = () => {
           <button onClick={addEntry} className="btn">Add New Entry</button>
         </div>
         <div className="entries">
-          {dashboardEntries.map(entry=>{
+          {entries.map(entry=>{
             return <DashboardEntry key={entry._id} {...entry}/>
           })}
         </div>

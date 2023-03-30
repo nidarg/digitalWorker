@@ -24,7 +24,6 @@ import{
     DELETE_ENTRY_SUCCESS ,
     DELETE_ENTRY_FAIL,
     HIDE_ENTRY,
-    FILTER_ENTRIES,
     
     } from './actions'
 
@@ -93,7 +92,7 @@ const reducer = (state, action)=>{
           ...state,
           isLoading:false,
           entries:action.payload.entries,
-          dashboardEntries:action.payload.entries,
+          // filteredEntries:state.filteredEntries,
           totalEntries:action.payload.totalEntries,
           numPages : action.payload.numPages
         }
@@ -222,16 +221,11 @@ const reducer = (state, action)=>{
         return{
           ...state,
           hide:true,
-          filteredEntries:state.entries.filter(entry=>entry._id !== action.payload)
+          filteredEntries:[...state.filteredEntries, action.payload],
+          
         }
+        
       }
-
-      // if(action.type === FILTER_ENTRIES){
-      //   return{
-      //     ...state,
-      //     entries:state.filteredEntries
-      //   }
-      // }
 
       if (action.type === CLEAR_VALUES) {
       

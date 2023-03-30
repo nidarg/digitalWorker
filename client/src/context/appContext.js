@@ -27,13 +27,14 @@ DELETE_ENTRY_REQUEST,
 DELETE_ENTRY_SUCCESS ,
 DELETE_ENTRY_FAIL,
 HIDE_ENTRY,
-FILTER_ENTRIES
+
 
 } from './actions'
 
 
 const token = localStorage.getItem('token')
 const user = localStorage.getItem('user')
+const filteredEntries = localStorage.getItem('filteredEntries')
 
 
 export const initialState = {
@@ -49,11 +50,10 @@ export const initialState = {
     totalEntries:0,
     entries:[],
     dashboardEntries:[],
-    filteredEntries:[],
+    filteredEntries:filteredEntries ? filteredEntries : [],
     isEditing:false,
     editEntrieId:'',
     entry:{},
-    isDashboard:false,
     hide:false,
     }
 
@@ -96,7 +96,6 @@ export const initialState = {
             })
             addUserToLocalStorage({user,token})
             } catch (error) {
-                // console.log(error.response)
                 dispatch({
                     type:LOGIN_FAIL,
                     payload:{msg:error.response.data.msg}
@@ -123,6 +122,7 @@ export const initialState = {
                     type:GET_ENTRIES_SUCCESS,
                     payload:{entries,totalEntries,numPages}
                 })
+                // localStorage.setItem('entries', JSON.stringify(entries))
             } catch (error) {
                 dispatch({
                     type:GET_ENTRIES_FAIL,
@@ -131,9 +131,7 @@ export const initialState = {
             }
           }
 
-          // const getFilteredEntries = ()=>{
-          //   dispatch({type:FILTER_ENTRIES})
-          // }
+        
 
           const getEntry = async(id)=>{
             dispatch({type:GET_ENTRY_REQUEST})
@@ -226,8 +224,9 @@ export const initialState = {
             
           };
 
-          const hide = (id)=>{
+          const hide = async(id)=>{
             dispatch({type:HIDE_ENTRY, payload:id})
+            localStorage.setItem('filteredEntries',[filteredEntries, id])
           }
 
           const clearValues = () => {
@@ -247,7 +246,6 @@ export const initialState = {
                 getEntry,
                 deleteEntry,
                 hide,
-                // getFilteredEntries
 
             }}>{children}</AppContext.Provider>
         )

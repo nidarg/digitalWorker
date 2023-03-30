@@ -6,36 +6,44 @@ import { Alert,Entry,Loading } from '../components'
 
 const Home = () => {
   
-    const {getEntries, isLoading, entries, showAlert,page,hide,getFilteredEntries} = useAppContext()
+    const {getEntries, isLoading, entries, showAlert,page,hide, filteredEntries} = useAppContext()
     const navigate = useNavigate()
+    console.log(hide);
+    console.log(filteredEntries);
     
     useEffect(()=>{
        // eslint-disable-next-line
-       
-        getEntries()
-       
+        getEntries()  
     },[page])
   
     return (
+
       <Wrapper >
         <div className='container'>
         {showAlert && <Alert/>}
         {isLoading && <Loading/>}
-        {entries && (
-          <div className="entries">
-          {entries.map(entry=>{
-            return <Entry key={entry._id} {...entry}/>
-          })}
-        </div>
-        )}
-          
+        
+          {entries && (
+            <div className="entries">
+            {entries.map(entry=>{
+              if(filteredEntries && filteredEntries.includes(entry._id)){
+                return <></>
+              }
+              return <Entry key={entry._id} {...entry}/>
+            })}
+          </div>
+        )}      
         </div>
       </Wrapper>
     )
+    
   }
    
   const Wrapper = styled.div`
-  
+
+  .hide{
+    visibility:hidden;
+  }
 .container{
   width:90vw;
   margin:0 auto;

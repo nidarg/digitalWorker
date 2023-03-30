@@ -21,7 +21,7 @@ const EditEntry = () => {
 
   const [image,setImage] = useState(entry.image)
   const[isAdded, setIsAdded] = useState(false)
-  const [title,setTitle] = useState(entry.title)
+  const [title,setTitle] = useState('')
   const [description,setDescription] = useState(entry.description)
   const [customerWebsite,setCustomerWebsite] = useState(entry.customerWebsite)
 
@@ -51,10 +51,10 @@ const EditEntry = () => {
       displayAlert()
       return
     }
-    setTimeout(()=>{
-      navigate('/dashboard')
-      // window.location.reload(false);
-    },2000)
+    // setTimeout(()=>{
+    //   navigate('/dashboard')
+    //   // window.location.reload(false);
+    // },2000)
   }
 
   useEffect(()=>{
@@ -68,35 +68,40 @@ const EditEntry = () => {
       <form onSubmit={handleSubmit} className="form">
         <h3>Edit Entry</h3>
         {showAlert && <Alert/>}
-        <div className="form-row">
-          <label className='form-label' htmlFor="title">Title</label>
-          <input id="title" name="title"className='form-input' type="text" value={entry.title || ''} onChange={(e)=>setTitle(e.target.value)} />
-        </div>
-        <div className="form-row">
-          <label className='form-label'  htmlFor="description">Description</label>
-          <input name="description" id = "description" className='form-input' type="text" value={entry.description || ''} onChange={(e)=>setDescription(e.target.value)} />
-        </div>
+       
+          <>
+              <div className="form-row">
+              <label className='form-label' htmlFor="title">Title</label>
+              <input id="title" name="title"className='form-input' type="text" defaultValue={entry.title} value={title}  onChange={(e)=>setTitle(e.target.value)} />
+              </div>
+              <div className="form-row">
+              <label className='form-label'  htmlFor="description">Description</label>
+              <input name="description" id = "description" className='form-input' type="text" defaultValue={entry.description} onChange={(e)=>setDescription(e.target.value)} />
+              </div>
 
 
-        <div className="form-row">
-          <label className='form-label'  htmlFor="image">Image</label>
-          <div className='input-image'>
-            <img src={entry.image} alt="" />
-          </div>
-          
-          {/* <input name="image" id = "image" placeholder='Enter image url'className='form-input' type="text" value={image}  /> */}
-          <input name="image" id = "image" className='form-input' type="file" accept='image/*'  onChange={(e)=>{setImage(e.target.files[0])}} />
-        </div>
+              <div className="form-row">
+              <label className='form-label'  htmlFor="image">Image</label>
+              <div className='input-image'>
+                <img src={entry.image} alt="" />
+              </div>
 
-        <div className="form-row">
-          <label className='form-label'  htmlFor="customerWebsite">Customer Website</label>
-          <input name="customerWebsite" id = "customerWebsite" className='form-input' type="text" value={entry.customerWebsite || ''} onChange={(e)=>setCustomerWebsite(e.target.value)} />
-        </div>
+              {/* <input name="image" id = "image" placeholder='Enter image url'className='form-input' type="text" value={image}  /> */}
+              <input name="image" id = "image" className='form-input' type="file" accept='image/*'  onChange={(e)=>{setImage(e.target.files[0])}} />
+              </div>
+
+              <div className="form-row">
+              <label className='form-label'  htmlFor="customerWebsite">Customer Website</label>
+              <input name="customerWebsite" id = "customerWebsite" className='form-input' type="text" defaultValue={entry.customerWebsite} onChange={(e)=>setCustomerWebsite(e.target.value)} />
+              </div>
 
 
-        <button type='submit' disabled = {isLoading} className='btn btn-block'>
-          submit
-        </button>
+              <button type='submit' disabled = {isLoading} className='btn btn-block'>
+              submit
+              </button>
+          </>
+
+        
       </form>
     </Wrapper>
   )

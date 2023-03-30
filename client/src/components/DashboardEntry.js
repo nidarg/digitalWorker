@@ -9,10 +9,10 @@ const DashboardEntry = ({_id,title,image}) => {
 
   const hideEntry = ()=>{
     hide(_id)
-    setTimeout(()=>{
-      navigate('/')
-      window.location.reload(false);
-    },)
+    // setTimeout(()=>{
+    //   navigate('/')
+    //   window.location.reload(false);
+    // },1000)
   }
   const showEntry = ()=>{
     

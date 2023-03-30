@@ -20,6 +20,8 @@ const Entry = ({_id,title,description,image,customerWebsite}) => {
 }
 
 const Wrapper = styled.section`
+
+  
 .entry{
   background:var(--white);
   min-width:80vw;
