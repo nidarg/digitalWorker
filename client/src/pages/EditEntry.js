@@ -1,5 +1,5 @@
-import {useState,useEffect}from 'react'
-import { useNavigate,useParams } from 'react-router-dom'
+import {useState,useEffect,useRef}from 'react'
+import { useNavigate,useLocation } from 'react-router-dom'
 import {Alert} from '../components'
 import styled from 'styled-components'
 import { useAppContext } from '../context/appContext'
@@ -7,92 +7,121 @@ import axios from 'axios'
 
 
 const EditEntry = () => {
-  const {id:entryId} = useParams()
-
-  const {entry,getEntry,isLoading, showAlert, updateEntry, displayAlert} = useAppContext()
-
+  
+  const {getEntry,isLoading, showAlert, updateEntry, displayAlert} = useAppContext()
+  
+  const location = useLocation()
   const navigate = useNavigate()
 
+  const [values, setValues] = useState({})
+  console.log('VALUES', values);
+  console.log('TITLE', values.title);
+  const [image,setImage] = useState('')
+  const [entryId, setEntryId] = useState('')
   useEffect(()=>{
-    getEntry(entryId)
-  },[entryId])
-
+    console.log('LOCATION', location);
+    
+    
+      setValues({title:location.state.title,description:location.state.description,customerWebsite:location.state.customerWebsite})
+      setImage(location.state.image)
+      setEntryId(location.state._id)
+  },[location]) 
   
 
-  const [image,setImage] = useState(entry.image)
-  const[isAdded, setIsAdded] = useState(false)
-  const [title,setTitle] = useState('')
-  const [description,setDescription] = useState(entry.description)
-  const [customerWebsite,setCustomerWebsite] = useState(entry.customerWebsite)
 
-  const handleChangeImage = async(e)=>{
-    const formData = new FormData()
-    formData.append('image', image)
-    try {
-      const {data} = await axios.post('/api/v1/entries/uploads', formData,{
-        headers:{
-          'Content-Type':'multipart/form-data'
-        }
-      })
-      // return data
-      setImage(data)
-      
-      setIsAdded(true)
-    } catch (error) {
-      setImage('')
-    }
+  // const [values, setValues] = useState(initialState)
+  // console.log('VALUES', values);
+  // console.log('TITLE', values.title);
+  // const [image,setImage] = useState(entry.image)
+  const[isAdded,setIsAdded] = useState(false)
+  const[isChanged,setIsChanged] = useState(false)
+
+  // useEffect(()=>{
+  //   setValues(initialState)
+  // },[render])
+
+  const handleChange = async(e) => {
+      setValues({...values, [e.target.name] : e.target.value})
+
   }
 
-  const handleSubmit = async (e)=>{
+  const handleChangeImage = async(e)=>{
+      const formData = new FormData()
+      formData.append('image', image)
+      if(isChanged){
+        try {
+          const {data} = await axios.post('/api/v1/entries/uploads', formData,{
+            headers:{
+              'Content-Type':'multipart/form-data'
+            }
+          })
+          
+          setImage(data)
+          
+        } catch (error) {
+          setImage('')
+        }
+      }else{
+        setImage(image)
+      }
+      setIsAdded(true)
+    }
+
+  const submitHandler = async(e)=>{
     e.preventDefault()
     await handleChangeImage()
-    
-    if(!entry._id || !entry.title || !entry.description || !entry.image || !entry.customerWebsite){
+    // setRerender(false)
+    const {title,description,customerWebsite} = values
+    if(!title || !description || !customerWebsite ||!image){
       displayAlert()
       return
     }
-    // setTimeout(()=>{
-    //   navigate('/dashboard')
-    //   // window.location.reload(false);
-    // },2000)
-  }
+}
+ 
 
   useEffect(()=>{
+    const {title,description,customerWebsite} = values
     if(isAdded){
       updateEntry({entryId,title,description,image,customerWebsite})
+      setTimeout(()=>{
+        navigate('/dashboard')
+        window.location.reload(false);
+      })
     }
   },[isAdded])
 
   return (
     <Wrapper>
-      <form onSubmit={handleSubmit} className="form">
+      <form onSubmit={submitHandler} className="form">
         <h3>Edit Entry</h3>
         {showAlert && <Alert/>}
-       
           <>
               <div className="form-row">
               <label className='form-label' htmlFor="title">Title</label>
-              <input id="title" name="title"className='form-input' type="text" defaultValue={entry.title} value={title}  onChange={(e)=>setTitle(e.target.value)} />
+              <input id="title" name="title" className='form-input' type="text" value={values.title} onChange={handleChange} />
               </div>
               <div className="form-row">
               <label className='form-label'  htmlFor="description">Description</label>
-              <input name="description" id = "description" className='form-input' type="text" defaultValue={entry.description} onChange={(e)=>setDescription(e.target.value)} />
+              <input name="description" id = "description" className='form-input' type="text" value={values.description}  onChange={handleChange} />
               </div>
 
 
-              <div className="form-row">
+             <div className="form-row">
               <label className='form-label'  htmlFor="image">Image</label>
               <div className='input-image'>
-                <img src={entry.image} alt="" />
+                <img src={image} alt="" />
               </div>
 
-              {/* <input name="image" id = "image" placeholder='Enter image url'className='form-input' type="text" value={image}  /> */}
-              <input name="image" id = "image" className='form-input' type="file" accept='image/*'  onChange={(e)=>{setImage(e.target.files[0])}} />
-              </div>
+              {/* <input name="image" id = "image" placeholder='Enter image url'className='form-input' type="text" value={firstImage}  onChange={handleChange}/> */}
+              <input name="image" id = "image" className='form-input' type="file" accept='image/*'  onChange={(e)=>{
+                setImage(e.target.files[0])
+                setIsChanged(true)
+                }} />
+              </div> 
 
               <div className="form-row">
               <label className='form-label'  htmlFor="customerWebsite">Customer Website</label>
-              <input name="customerWebsite" id = "customerWebsite" className='form-input' type="text" defaultValue={entry.customerWebsite} onChange={(e)=>setCustomerWebsite(e.target.value)} />
+              <input name="customerWebsite" id = "customerWebsite" className='form-input' type="text" value={values.customerWebsite}  onChange={handleChange} />
               </div>
 
 

@@ -27,14 +27,15 @@ DELETE_ENTRY_REQUEST,
 DELETE_ENTRY_SUCCESS ,
 DELETE_ENTRY_FAIL,
 HIDE_ENTRY,
-
+SHOW_ENTRY,
+CHANGE_PAGE
 
 } from './actions'
 
 
 const token = localStorage.getItem('token')
 const user = localStorage.getItem('user')
-const filteredEntries = localStorage.getItem('filteredEntries')
+let filteredEntries = localStorage.getItem('filteredEntries')
 
 
 export const initialState = {
@@ -50,11 +51,13 @@ export const initialState = {
     totalEntries:0,
     entries:[],
     dashboardEntries:[],
+    entriesIds:[],
     filteredEntries:filteredEntries ? filteredEntries : [],
     isEditing:false,
     editEntrieId:'',
     entry:{},
     hide:false,
+    
     }
 
     const AppContext = React.createContext()
@@ -225,9 +228,48 @@ export const initialState = {
           };
 
           const hide = async(id)=>{
-            dispatch({type:HIDE_ENTRY, payload:id})
-            localStorage.setItem('filteredEntries',[filteredEntries, id])
+            filteredEntries = [...state.filteredEntries]
+            // console.log(typeof id);
+            if(!filteredEntries){
+              // console.log('NO FILTERED ENTRIES');
+              filteredEntries = [...state.filteredEntries, id]
+              localStorage.setItem('filteredEntries',filteredEntries)
+              dispatch({type:HIDE_ENTRY, payload:filteredEntries})
+              
+            }
+            else if(filteredEntries && !filteredEntries.includes(id)){
+            const newArray = [...state.filteredEntries,id]
+            // console.log('hide FILTERED ENTRIES MODIFIED',newArray);
+            dispatch({type:HIDE_ENTRY, payload:newArray})
+            const stringArr = JSON.stringify(newArray)
+            localStorage.setItem('filteredEntries',stringArr)  
+            }else{
+              // console.log('hide FILTERED ENTRIES',filteredEntries);
+              dispatch({type:HIDE_ENTRY, payload:filteredEntries})
+            }
           }
+
+          const show = async(id)=>{
+            // console.log(typeof filteredEntries);
+            filteredEntries = [...state.filteredEntries]
+            // console.log('show FILTERED ENTRIES',filteredEntries)
+            if(filteredEntries.includes(id)){
+              console.log('ID TO FILTER', id);
+            const newArray= filteredEntries.filter(entryId=>entryId !== id)
+            // console.log('show FILTERED ENTRIES MODIFIED',newArray);
+            dispatch({type:SHOW_ENTRY, payload:newArray})
+            const stringArr = JSON.stringify(newArray)
+            localStorage.setItem('filteredEntries',stringArr)
+          }else{
+            dispatch({type:SHOW_ENTRY, payload:filteredEntries})
+          }
+        }
+
+        const changePage=(page)=>{
+          dispatch({
+            type:CHANGE_PAGE, payload:{page}
+          })
+        }
 
           const clearValues = () => {
             dispatch({ type: CLEAR_VALUES });
@@ -246,6 +288,8 @@ export const initialState = {
                 getEntry,
                 deleteEntry,
                 hide,
+                show,
+                changePage
 
             }}>{children}</AppContext.Provider>
         )

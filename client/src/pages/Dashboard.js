@@ -5,7 +5,7 @@ import { useAppContext } from '../context/appContext'
 import { Alert,DashboardEntry,Loading } from '../components'
 
 const Dashboard = () => {
-  const {getEntries, isLoading, entries, showAlert} = useAppContext()
+  const {getEntries, isLoading, entries, showAlert,clearValues} = useAppContext()
   const navigate = useNavigate()
   const addEntry = ()=>{
     navigate('/add-entry')
@@ -13,6 +13,7 @@ const Dashboard = () => {
 
   useEffect(()=>{
     getEntries()
+     clearValues()
   },[])
 
   return (

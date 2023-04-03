@@ -11,8 +11,8 @@ const Entry = ({_id,title,description,image,customerWebsite}) => {
         <img src={image} alt="" />
         <h5 className='title'>{title}</h5>
         <p className='description'>{description}</p>
-        <Link to={{customerWebsite}}target="_blank">
-          <button className='btn btn-full-width'>{customerWebsite}</button></Link>
+        <a href={customerWebsite} rel='noopener' target="_blank">
+          <button className='btn btn-full-width'>{customerWebsite}</button></a>
       </div>
     </Wrapper>
     

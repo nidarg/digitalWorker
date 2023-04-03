@@ -24,6 +24,8 @@ export const DELETE_ENTRY_SUCCESS = 'DELETE_ENTRY_SUCCESS'
 export const DELETE_ENTRY_FAIL = 'DELETE_ENTRY_FAIL'
 
 export const HIDE_ENTRY = 'HIDE_ENTRY'
+export const SHOW_ENTRY = 'SHOW_ENTRY'
+export const CHANGE_PAGE = 'CHANGE_PAGE'
 
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST'

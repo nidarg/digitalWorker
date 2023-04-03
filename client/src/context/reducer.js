@@ -24,7 +24,8 @@ import{
     DELETE_ENTRY_SUCCESS ,
     DELETE_ENTRY_FAIL,
     HIDE_ENTRY,
-    
+    SHOW_ENTRY,
+    CHANGE_PAGE
     } from './actions'
 
 import {initialState} from './appContext'
@@ -94,7 +95,7 @@ const reducer = (state, action)=>{
           entries:action.payload.entries,
           // filteredEntries:state.filteredEntries,
           totalEntries:action.payload.totalEntries,
-          numPages : action.payload.numPages
+          numPages : action.payload.numPages,
         }
       }
 
@@ -221,10 +222,17 @@ const reducer = (state, action)=>{
         return{
           ...state,
           hide:true,
-          filteredEntries:[...state.filteredEntries, action.payload],
+          filteredEntries:action.payload,
+        }
+      }
+
+      if(action.type === SHOW_ENTRY){
+        return{
+          ...state,
+          hide:false,
+          filteredEntries:action.payload
           
         }
-        
       }
 
       if (action.type === CLEAR_VALUES) {
@@ -233,6 +241,9 @@ const reducer = (state, action)=>{
             ...state,
             entry:{}
         }
+    }
+    if (action.type === CHANGE_PAGE) {
+      return { ...state, page: action.payload.page }
     }
 
       throw new Error(`no such action: ${action.type}`)
