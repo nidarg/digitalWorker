@@ -1,5 +1,5 @@
-import {useState,useEffect}from 'react'
-import { useNavigate,useParams } from 'react-router-dom'
+import {useState,useEffect,useRef}from 'react'
+import { useNavigate,useLocation } from 'react-router-dom'
 import {Alert} from '../components'
 import styled from 'styled-components'
 import { useAppContext } from '../context/appContext'
@@ -7,100 +7,123 @@ import axios from 'axios'
 
 
 const EditEntry = () => {
-  const {id:entryId} = useParams()
-
-  const {entry,getEntry,isLoading, showAlert, updateEntry, displayAlert} = useAppContext()
-
+  
+  const {getEntry,isLoading, showAlert, updateEntry, displayAlert} = useAppContext()
+  
+  const location = useLocation()
   const navigate = useNavigate()
   const[isAdded, setIsAdded] = useState(false)
 
+  const [values, setValues] = useState({})
+  console.log('VALUES', values);
+  console.log('TITLE', values.title);
+  const [image,setImage] = useState('')
+  const [entryId, setEntryId] = useState('')
   useEffect(()=>{
-    getEntry(entryId)
-  },[entryId])
-
-  const {title, description, image, customerWebsite} = entry
-  console.log(title, description );
-  const [entryImage,setEntryImage] = useState(image)
-  
-  const [entryTitle,setEntryTitle] = useState(title)
-  const [entryDescription,setEntryDescription] = useState(description)
-  const [entryCustomerWebsite,setEntryCustomerWebsite] = useState(customerWebsite)
-
-  const handleChangeImage = async(e)=>{
-    if(image !== entry.image){
-      console.log('image !== entry.image');
-      const formData = new FormData()
-    formData.append('image', image)
-    try {
-      const {data} = await axios.post('/api/v1/entries/uploads', formData,{
-        headers:{
-          'Content-Type':'multipart/form-data'
-        }
-      })
-      // return data
-      setEntryImage(data)
-    } catch (error) {
-      setEntryImage('')
-    }
-    }
-      setIsAdded(true)
+    console.log('LOCATION', location);
     
+    
+      setValues({title:location.state.title,description:location.state.description,customerWebsite:location.state.customerWebsite})
+      setImage(location.state.image)
+      setEntryId(location.state._id)
+  },[location]) 
+  
+
+
+  // const [values, setValues] = useState(initialState)
+  // console.log('VALUES', values);
+  // console.log('TITLE', values.title);
+  // const [image,setImage] = useState(entry.image)
+  const[isAdded,setIsAdded] = useState(false)
+  const[isChanged,setIsChanged] = useState(false)
+
+  // useEffect(()=>{
+  //   setValues(initialState)
+  // },[render])
+
+  const handleChange = async(e) => {
+      setValues({...values, [e.target.name] : e.target.value})
+
   }
 
-  const handleSubmit = async (e)=>{
+  const handleChangeImage = async(e)=>{
+      const formData = new FormData()
+      formData.append('image', image)
+      if(isChanged){
+        try {
+          const {data} = await axios.post('/api/v1/entries/uploads', formData,{
+            headers:{
+              'Content-Type':'multipart/form-data'
+            }
+          })
+          
+          setImage(data)
+          
+        } catch (error) {
+          setImage('')
+        }
+      }else{
+        setImage(image)
+      }
+      setIsAdded(true)
+    }
+
+  const submitHandler = async(e)=>{
     e.preventDefault()
     await handleChangeImage()
-    
-    if(!entryId || !entryTitle || !entryDescription || !entryImage || !entryCustomerWebsite){
+    // setRerender(false)
+    const {title,description,customerWebsite} = values
+    if(!title || !description || !customerWebsite ||!image){
       displayAlert()
       return
     }
-
-    // setTimeout(()=>{
-    //   navigate('/dashboard')
-    //   // window.location.reload(false);
-    // },2000)
-  }
+}
+ 
 
   useEffect(()=>{
+    const {title,description,customerWebsite} = values
     if(isAdded){
-      updateEntry({entryId,entryTitle,entryDescription,entryImage,entryCustomerWebsite})
+      updateEntry({entryId,title,description,image,customerWebsite})
+      setTimeout(()=>{
+        navigate('/dashboard')
+        window.location.reload(false);
+      })
     }
   },[isAdded])
 
   return (
     <Wrapper>
-      <form onSubmit={handleSubmit} className="form">
+      <form onSubmit={submitHandler} className="form">
         <h3>Edit Entry</h3>
         {showAlert && <Alert/>}
-       
-         
-          
- <>
-<div className="form-row">
-<label className='form-label' htmlFor="title">Title</label>
-<input id="title" name="title"className='form-input' type="text" value={entryTitle}  onChange={(e)=>setEntryTitle(e.target.value)} />
-</div>
-<div className="form-row">
-<label className='form-label'  htmlFor="description">Description</label>
-<input name="description" id = "description" className='form-input' type="text" value={entryDescription} onChange={(e)=>setEntryDescription(e.target.value)} />
-</div>
+          <>
+              <div className="form-row">
+              <label className='form-label' htmlFor="title">Title</label>
+              <input id="title" name="title" className='form-input' type="text" value={values.title} onChange={handleChange} />
+              </div>
+              <div className="form-row">
+              <label className='form-label'  htmlFor="description">Description</label>
+              <input name="description" id = "description" className='form-input' type="text" value={values.description}  onChange={handleChange} />
+              </div>
 
 
-<div className="form-row">
-<label className='form-label'  htmlFor="image">Image</label>
-<div className='input-image'>
-  <img src={entryImage} alt="" />
-</div>
+             <div className="form-row">
+              <label className='form-label'  htmlFor="image">Image</label>
+              <div className='input-image'>
+                <img src={image} alt="" />
+              </div>
 
-{/* <input name="image" id = "image" placeholder='Enter image url'className='form-input' type="text" value={image}  /> */}
-<input name="image" id = "image" className='form-input' type="file" accept='image/*'  onChange={(e)=>{setEntryImage(e.target.files[0])}} />
-</div>
+              {/* <input name="image" id = "image" placeholder='Enter image url'className='form-input' type="text" value={firstImage}  onChange={handleChange}/> */}
+              <input name="image" id = "image" className='form-input' type="file" accept='image/*'  onChange={(e)=>{
+                setImage(e.target.files[0])
+                setIsChanged(true)
+                }} />
+              </div> 
 
-<div className="form-row">
-<label className='form-label'  htmlFor="customerWebsite">Customer Website</label>
-<input name="customerWebsite" id = "customerWebsite" className='form-input' type="text" value={entryCustomerWebsite} onChange={(e)=>setEntryCustomerWebsite(e.target.value)} />
-</div>
+              <div className="form-row">
+              <label className='form-label'  htmlFor="customerWebsite">Customer Website</label>
+              <input name="customerWebsite" id = "customerWebsite" className='form-input' type="text" value={values.customerWebsite}  onChange={handleChange} />
+              </div>
 
 
 <button type='submit' disabled = {isLoading} className='btn btn-block'>

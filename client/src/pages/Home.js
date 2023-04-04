@@ -2,19 +2,19 @@ import React,{useEffect} from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { useAppContext } from '../context/appContext'
-import { Alert,Entry,Loading } from '../components'
+import { Alert,Entry,Loading,Paginate } from '../components'
 
 const Home = () => {
   
-    const {getEntries, isLoading, entries, showAlert,page,hide, filteredEntries} = useAppContext()
+    const {getEntries, isLoading, entries, showAlert,page, filteredEntries} = useAppContext()
     const navigate = useNavigate()
-    console.log(hide);
-    console.log(filteredEntries);
     
+    // console.log('FILTEREDENTRIES',filteredEntries);
+    console.log('FILTERED ENTRIES TYPE', typeof(filteredEntries));
     useEffect(()=>{
        // eslint-disable-next-line
         getEntries()  
-    },[page])
+    },[page,filteredEntries])
   
     return (
 
@@ -27,14 +27,17 @@ const Home = () => {
             <div className="entries">
             {entries.map(entry=>{
               if(filteredEntries && filteredEntries.includes(entry._id)){
-                return <></>
+                return 
               }
               return <Entry key={entry._id} {...entry}/>
             })}
           </div>
         )}      
+         <Paginate/>
         </div>
+       
       </Wrapper>
+      
     )
     
   }

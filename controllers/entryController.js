@@ -18,7 +18,7 @@ const getAllEntries = async(req,res)=>{
 
 const getEntry = async(req,res)=>{
     const {id:entryId} = req.params
-    const entry = await Entry.findOne({createdBy:req.user._id,_id:entryId})
+    const entry = await Entry.findById(entryId)
     if(!entry){
         throw new NotFoundError(`Entry with id ${entryId} not found`)
     }

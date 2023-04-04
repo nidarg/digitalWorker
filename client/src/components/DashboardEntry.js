@@ -1,21 +1,27 @@
-import React from 'react'
+import React, { useState,useEffect } from 'react'
 import styled from 'styled-components'
 import { useAppContext } from '../context/appContext'
 import { Link, useNavigate } from 'react-router-dom'
-
-const DashboardEntry = ({_id,title,image}) => {
+const DashboardEntry = ({...entry}) => {
   const navigate = useNavigate()
-  const{deleteEntry,hide} = useAppContext()
+  const {_id,title,description,image, customerWebsite} = entry
+  const{deleteEntry,hide,show} = useAppContext()
+ 
 
   const hideEntry = ()=>{
+
     hide(_id)
     // setTimeout(()=>{
     //   navigate('/')
     //   window.location.reload(false);
-    // },1000)
+    // },)
   }
   const showEntry = ()=>{
-    
+   show(_id)
+  //  setTimeout(()=>{
+  //   navigate('/')
+  //   window.location.reload(false);
+  // },)
   }
 
   const handleDeleteEntry = ()=>{
@@ -35,11 +41,10 @@ const DashboardEntry = ({_id,title,image}) => {
         <p className='title'>{title}</p>
         </div>
         
-        {/* <p className='description'>{description}</p> */}
-        {/* <p className="customerWebsite">{customerWebsite}</p> */}
-        <Link className='btn' to={`/edit-entry/${_id}`}>Update Entry</Link>
-        <button onClick={hideEntry}  className='btn'>Hide Entry</button>
-        <button onClick={showEntry}  className='btn'>Show Entry</button>
+        <Link className='btn' to={`/edit-entry/${_id}`} state={entry}>Update Entry</Link>
+      
+        <button onClick={hideEntry}  className='btn'>Hide Entry </button>
+        <button onClick={showEntry} className='btn'>Show Entry</button>
         <button onClick={handleDeleteEntry}  className='btn btn-danger'>Delete Entry</button>
       </div>
     </Wrapper>
