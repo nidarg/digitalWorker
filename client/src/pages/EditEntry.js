@@ -12,21 +12,24 @@ const EditEntry = () => {
   const {entry,getEntry,isLoading, showAlert, updateEntry, displayAlert} = useAppContext()
 
   const navigate = useNavigate()
+  const[isAdded, setIsAdded] = useState(false)
 
   useEffect(()=>{
     getEntry(entryId)
   },[entryId])
 
+  const {title, description, image, customerWebsite} = entry
+  console.log(title, description );
+  const [entryImage,setEntryImage] = useState(image)
   
-
-  const [image,setImage] = useState(entry.image)
-  const[isAdded, setIsAdded] = useState(false)
-  const [title,setTitle] = useState('')
-  const [description,setDescription] = useState(entry.description)
-  const [customerWebsite,setCustomerWebsite] = useState(entry.customerWebsite)
+  const [entryTitle,setEntryTitle] = useState(title)
+  const [entryDescription,setEntryDescription] = useState(description)
+  const [entryCustomerWebsite,setEntryCustomerWebsite] = useState(customerWebsite)
 
   const handleChangeImage = async(e)=>{
-    const formData = new FormData()
+    if(image !== entry.image){
+      console.log('image !== entry.image');
+      const formData = new FormData()
     formData.append('image', image)
     try {
       const {data} = await axios.post('/api/v1/entries/uploads', formData,{
@@ -35,22 +38,24 @@ const EditEntry = () => {
         }
       })
       // return data
-      setImage(data)
-      
-      setIsAdded(true)
+      setEntryImage(data)
     } catch (error) {
-      setImage('')
+      setEntryImage('')
     }
+    }
+      setIsAdded(true)
+    
   }
 
   const handleSubmit = async (e)=>{
     e.preventDefault()
     await handleChangeImage()
     
-    if(!entry._id || !entry.title || !entry.description || !entry.image || !entry.customerWebsite){
+    if(!entryId || !entryTitle || !entryDescription || !entryImage || !entryCustomerWebsite){
       displayAlert()
       return
     }
+
     // setTimeout(()=>{
     //   navigate('/dashboard')
     //   // window.location.reload(false);
@@ -59,7 +64,7 @@ const EditEntry = () => {
 
   useEffect(()=>{
     if(isAdded){
-      updateEntry({entryId,title,description,image,customerWebsite})
+      updateEntry({entryId,entryTitle,entryDescription,entryImage,entryCustomerWebsite})
     }
   },[isAdded])
 
@@ -69,37 +74,42 @@ const EditEntry = () => {
         <h3>Edit Entry</h3>
         {showAlert && <Alert/>}
        
-          <>
-              <div className="form-row">
-              <label className='form-label' htmlFor="title">Title</label>
-              <input id="title" name="title"className='form-input' type="text" defaultValue={entry.title} value={title}  onChange={(e)=>setTitle(e.target.value)} />
-              </div>
-              <div className="form-row">
-              <label className='form-label'  htmlFor="description">Description</label>
-              <input name="description" id = "description" className='form-input' type="text" defaultValue={entry.description} onChange={(e)=>setDescription(e.target.value)} />
-              </div>
+         
+          
+ <>
+<div className="form-row">
+<label className='form-label' htmlFor="title">Title</label>
+<input id="title" name="title"className='form-input' type="text" value={entryTitle}  onChange={(e)=>setEntryTitle(e.target.value)} />
+</div>
+<div className="form-row">
+<label className='form-label'  htmlFor="description">Description</label>
+<input name="description" id = "description" className='form-input' type="text" value={entryDescription} onChange={(e)=>setEntryDescription(e.target.value)} />
+</div>
 
 
-              <div className="form-row">
-              <label className='form-label'  htmlFor="image">Image</label>
-              <div className='input-image'>
-                <img src={entry.image} alt="" />
-              </div>
+<div className="form-row">
+<label className='form-label'  htmlFor="image">Image</label>
+<div className='input-image'>
+  <img src={entryImage} alt="" />
+</div>
 
-              {/* <input name="image" id = "image" placeholder='Enter image url'className='form-input' type="text" value={image}  /> */}
-              <input name="image" id = "image" className='form-input' type="file" accept='image/*'  onChange={(e)=>{setImage(e.target.files[0])}} />
-              </div>
+{/* <input name="image" id = "image" placeholder='Enter image url'className='form-input' type="text" value={image}  /> */}
+<input name="image" id = "image" className='form-input' type="file" accept='image/*'  onChange={(e)=>{setEntryImage(e.target.files[0])}} />
+</div>
 
-              <div className="form-row">
-              <label className='form-label'  htmlFor="customerWebsite">Customer Website</label>
-              <input name="customerWebsite" id = "customerWebsite" className='form-input' type="text" defaultValue={entry.customerWebsite} onChange={(e)=>setCustomerWebsite(e.target.value)} />
-              </div>
+<div className="form-row">
+<label className='form-label'  htmlFor="customerWebsite">Customer Website</label>
+<input name="customerWebsite" id = "customerWebsite" className='form-input' type="text" value={entryCustomerWebsite} onChange={(e)=>setEntryCustomerWebsite(e.target.value)} />
+</div>
 
 
-              <button type='submit' disabled = {isLoading} className='btn btn-block'>
-              submit
-              </button>
-          </>
+<button type='submit' disabled = {isLoading} className='btn btn-block'>
+submit
+</button>
+</>
+     
+              
+        
 
         
       </form>
