@@ -12,7 +12,6 @@ const EditEntry = () => {
   
   const location = useLocation()
   const navigate = useNavigate()
-  const[isAdded, setIsAdded] = useState(false)
 
   const [values, setValues] = useState({})
   console.log('VALUES', values);
@@ -126,13 +125,10 @@ const EditEntry = () => {
               </div>
 
 
-<button type='submit' disabled = {isLoading} className='btn btn-block'>
-submit
-</button>
-</>
-     
-              
-        
+              <button type='submit' disabled = {isLoading} className='btn btn-block'>
+              submit
+              </button>
+          </>
 
         
       </form>
@@ -162,13 +158,11 @@ const Wrapper = styled.section`
   .btn {
     margin-top: 1rem;
   }
-
   @media screen and (max-width: 768px){
     .form{
       margin-top:30rem;
     }
   }
-
 `
 
 

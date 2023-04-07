@@ -6,7 +6,7 @@ const getAllEntries = async(req,res)=>{
     // const queryObject = {createdBy:req.user._id}
     let result = Entry.find({})
     const page = Number(req.query.page) || 1
-    const limit = req.query.limit || 4
+    const limit = req.query.limit || 1
     result = result.skip((page - 1) * limit).limit(limit)
 
     const entries = await result.sort('-createdAt')

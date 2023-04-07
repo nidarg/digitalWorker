@@ -10,7 +10,7 @@ const Home = () => {
     const navigate = useNavigate()
     
     // console.log('FILTEREDENTRIES',filteredEntries);
-    console.log('FILTERED ENTRIES TYPE', typeof(filteredEntries));
+    // console.log('FILTERED ENTRIES TYPE', typeof(filteredEntries));
     useEffect(()=>{
        // eslint-disable-next-line
         getEntries()  
