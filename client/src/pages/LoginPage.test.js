@@ -3,7 +3,8 @@ import {render, screen, waitFor} from '@testing-library/react'
 import user from '@testing-library/user-event'
 import LoginPage from './LoginPage'
 import { AppProvider } from '../context/appContext'
-import { BrowserRouter, Router } from 'react-router-dom';
+import { BrowserRouter} from 'react-router-dom';
+import {rest} from 'msw'
 
 test('it shows two inputs and a button', ()=>{
     render(<AppProvider value={false}><BrowserRouter><LoginPage/></BrowserRouter></AppProvider>)
@@ -17,14 +18,15 @@ test('it shows two inputs and a button', ()=>{
     expect(button).toBeInTheDocument();
 })
 
+const resolver = jest.fn()
+rest.post('/api/v1/auth/login',resolver)
 test('it calls loginUser when the form is submitted', async()=>{
-    const onSubmit = jest.fn()
-    render(<AppProvider value={false}><BrowserRouter><LoginPage handleSubmit={onSubmit}/></BrowserRouter></AppProvider>)
+    
+    render(<AppProvider value={false}><BrowserRouter><LoginPage/></BrowserRouter></AppProvider>)
    
   
     // screen.logTestingPlaygroundURL()
-   
-
+    
     const textInput = screen.getByRole('textbox',{name:/email/i});
     const passwordInput = screen.getByLabelText('Password')
     const button = screen.getByRole('button');
@@ -35,6 +37,8 @@ test('it calls loginUser when the form is submitted', async()=>{
     await user.type(passwordInput,'admin')
    await user.click(button)
 
-    await waitFor(()=>{expect(onSubmit).toHaveBeenCalledTimes(1)})
-    expect(onSubmit).toHaveBeenCalledWith({email:'admin@example.com', password:'admin'})
+    // eslint-disable-next-line testing-library/await-async-utils
+    waitFor(()=>expect(resolver).toHaveBeenCalledTimes(1)) 
+    // eslint-disable-next-line testing-library/await-async-utils
+    waitFor(()=>expect(resolver).toHaveBeenCalledWith({email:'admin@example.com', password:'admin'}))
 })

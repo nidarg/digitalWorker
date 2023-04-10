@@ -14,14 +14,12 @@ const EditEntry = () => {
   const navigate = useNavigate()
 
   const [values, setValues] = useState({})
-  console.log('VALUES', values);
-  console.log('TITLE', values.title);
+  // console.log('VALUES', values);
+  // console.log('TITLE', values.title);
   const [image,setImage] = useState('')
   const [entryId, setEntryId] = useState('')
   useEffect(()=>{
-    console.log('LOCATION', location);
-    
-    
+    // console.log('LOCATION', location);
       setValues({title:location.state.title,description:location.state.description,customerWebsite:location.state.customerWebsite})
       setImage(location.state.image)
       setEntryId(location.state._id)

@@ -16,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@testing-library/react-hooks": "^8.0.1",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.35.0",
     "concurrently": "^7.6.0",
@@ -30,6 +31,7 @@
     "joi": "^17.8.3",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.9.2",
+    "msw": "^1.2.1",
     "rate-limiter": "^0.2.0",
     "react-copy-to-clipboard": "^5.1.0",
     "swagger-ui-express": "^4.6.1",
