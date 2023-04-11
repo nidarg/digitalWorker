@@ -50,6 +50,9 @@ img{
   .entry{
    min-width:45vw;
   }
+  img{
+    height:20rem;
+  }
   
 }
 @media screen and (min-width: 768px){
