@@ -8,7 +8,7 @@ const Entry = ({_id,title,description,image,customerWebsite}) => {
   return (
     <Wrapper>
       <div className='entry'>
-        <img crossorigin="anonymous" src={image} alt="" />
+        <img src={image} alt="" />
         <h5 className='title'>{title}</h5>
         <p className='description'>{description}</p>
         <a href={customerWebsite} rel='noopener' target="_blank">
