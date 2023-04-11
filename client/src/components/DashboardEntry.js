@@ -2,6 +2,8 @@ import React, { useState,useEffect } from 'react'
 import styled from 'styled-components'
 import { useAppContext } from '../context/appContext'
 import { Link, useNavigate } from 'react-router-dom'
+
+
 const DashboardEntry = ({...entry}) => {
   const navigate = useNavigate()
   const {_id,title,description,image, customerWebsite} = entry
@@ -11,17 +13,9 @@ const DashboardEntry = ({...entry}) => {
   const hideEntry = ()=>{
 
     hide(_id)
-    // setTimeout(()=>{
-    //   navigate('/')
-    //   window.location.reload(false);
-    // },)
   }
   const showEntry = ()=>{
    show(_id)
-  //  setTimeout(()=>{
-  //   navigate('/')
-  //   window.location.reload(false);
-  // },)
   }
 
   const handleDeleteEntry = ()=>{

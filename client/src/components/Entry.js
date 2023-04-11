@@ -25,14 +25,14 @@ const Wrapper = styled.section`
 .entry{
   background:var(--white);
   min-width:80vw;
-  max-height:25rem;
+  max-height:50rem;
 display:grid;
 grid-template-columns:1fr;
 padding:1rem;
 }
 img{
   width:100%;
-  height:15rem;
+  height:18rem;
   object-fit:cover;
 }
 

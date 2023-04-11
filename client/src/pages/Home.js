@@ -29,7 +29,7 @@ const Home = () => {
               if(filteredEntries && filteredEntries.includes(entry._id)){
                 return 
               }
-              return <Entry key={entry._id} {...entry}/>
+              return <Entry data-testid='entry' key={entry._id} {...entry}/>
             })}
           </div>
         )}      

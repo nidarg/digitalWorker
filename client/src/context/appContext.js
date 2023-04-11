@@ -196,7 +196,7 @@ export const initialState = {
               dispatch({ type: UPDATE_ENTRY_SUCCESS,payload:entry});
               dispatch({ type: CLEAR_VALUES });
             } catch (error) {
-              if (error.response.status === 401) return;
+              // if (error.response.status === 401) return;
               dispatch({
                 type: UPDATE_ENTRY_FAIL,
                 payload: { msg: error.response.data.msg },
@@ -254,7 +254,6 @@ export const initialState = {
             filteredEntries = [...state.filteredEntries]
             // console.log('show FILTERED ENTRIES',filteredEntries)
             if(filteredEntries.includes(id)){
-              console.log('ID TO FILTER', id);
             const newArray= filteredEntries.filter(entryId=>entryId !== id)
             // console.log('show FILTERED ENTRIES MODIFIED',newArray);
             dispatch({type:SHOW_ENTRY, payload:newArray})

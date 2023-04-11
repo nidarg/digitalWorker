@@ -2,10 +2,10 @@ import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { useAppContext } from '../context/appContext'
-import { Alert,DashboardEntry,Loading } from '../components'
+import { Alert,DashboardEntry,Loading, Paginate} from '../components'
 
 const Dashboard = () => {
-  const {getEntries, isLoading, entries, showAlert,clearValues} = useAppContext()
+  const {getEntries, isLoading, entries, showAlert,clearValues,page} = useAppContext()
   const navigate = useNavigate()
   const addEntry = ()=>{
     navigate('/add-entry')
@@ -14,7 +14,7 @@ const Dashboard = () => {
   useEffect(()=>{
     getEntries()
      clearValues()
-  },[])
+  },[page])
 
   return (
     <Wrapper>
@@ -29,7 +29,9 @@ const Dashboard = () => {
             return <DashboardEntry key={entry._id} {...entry}/>
           })}
         </div>
+        <Paginate/>
       </div>
+    
     </Wrapper>
   )
 }

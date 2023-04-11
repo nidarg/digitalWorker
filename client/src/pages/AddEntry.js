@@ -52,7 +52,6 @@ const AddEntry = () => {
   }
 
   useEffect(()=>{
-    console.log(image);
     if(isUploaded){
       createEntry({title,description,image,customerWebsite})
       
@@ -79,7 +78,7 @@ const AddEntry = () => {
 
         <div className="form-row">
           <label className='form-label'  htmlFor="image">Image</label>
-          {/* <input name="image" id = "image" placeholder='Enter image url'className='form-input' type="text" value={image} onChange={(e)=>setImage(e.target.files[0])} /> */}
+          {/* <input name="image" id = "image" placeholder='Enter image url'className='form-input' type="text" value={image}  /> */}
           <input name="image" id = "image" className='form-input' type="file" accept='image/*'  onChange={(e)=>{setImage(e.target.files[0])}} />
         </div>
 
