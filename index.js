@@ -39,15 +39,15 @@ app.use(rateLimiter({
 app.use(express.json())
 app.use(fileUpload({ useTempFiles: true }));
 
-app.use(helmet({ crossOriginEmbedderPolicy: false, originAgentCluster: true }));
-app.use(
-  helmet.contentSecurityPolicy({
-    useDefaults: true,
-    directives: {
-      "img-src": ["'self'", "https: data: blob:"],
-    },
-  })
-);
+// app.use(helmet({ crossOriginEmbedderPolicy: false, originAgentCluster: true }));
+// app.use(
+//   helmet.contentSecurityPolicy({
+//     useDefaults: true,
+//     directives: {
+//       "img-src": ["'self'", "https: data: blob:"],
+//     },
+//   })
+// );
 app.use(cors())
 app.use(xss())
 
