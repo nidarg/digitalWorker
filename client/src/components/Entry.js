@@ -48,10 +48,10 @@ img{
 
 @media screen and (min-width: 1120px){
   .entry{
-   min-width:45vw;
+   min-width:50vw;
   }
   img{
-    height:20rem;
+    height:24rem;
   }
   
 }
