@@ -41,14 +41,10 @@ app.use(fileUpload({ useTempFiles: true }));
 
 // app.use(helmet({ crossOriginEmbedderPolicy: false, originAgentCluster: true }));
 app.use(
-  helmet.contentSecurityPolicy({
-    useDefaults: true,
-    directives: {
-      "script-src": ["'self'", "'unsafe-inline'", "example.com"],
-      "img-src": ["'self'", "https: data:"]
-    }
+  helmet({
+    contentSecurityPolicy: false,
   })
-)
+);
 app.use(cors())
 app.use(xss())
 
