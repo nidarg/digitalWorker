@@ -37,13 +37,12 @@ app.use(rateLimiter({
 	max: 100,
 }))
 app.use(express.json())
-
+app.use(fileUpload({ useTempFiles: true }));
 
 // app.use(helmet({ crossOriginEmbedderPolicy: false, originAgentCluster: true }));
-app.use(helmet({     crossOriginResourcePolicy: false,     crossOriginEmbedderPolicy: false,    }))
+app.use(helmet.crossOriginEmbedderPolicy({ policy: "credentialless" }))
 app.use(cors())
 app.use(xss())
-app.use(fileUpload({ useTempFiles: true }));
 
 app.use('/api/v1/auth',authRoutes)
 app.use('/api/v1/entries', entriesRoutes)
