@@ -40,11 +40,7 @@ app.use(express.json())
 app.use(fileUpload({ useTempFiles: true }));
 
 // app.use(helmet({ crossOriginEmbedderPolicy: false, originAgentCluster: true }));
-app.use(
-  helmet({
-    crossOriginEmbedderPolicy: false,
-  })
-);
+app.use(helmet({     crossOriginResourcePolicy: false,     crossOriginEmbedderPolicy: false,    }))
 app.use(cors())
 app.use(xss())
 

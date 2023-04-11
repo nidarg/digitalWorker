@@ -30,7 +30,7 @@ const DashboardEntry = ({...entry}) => {
   return (
     <Wrapper>
       <div className='dashboard-entry' >
-        <img  src={image} alt="" />
+        <img crossorigin="anonymous" src={image} alt="" />
         <div className="title-container">
         <p className='title'>{title}</p>
         </div>
