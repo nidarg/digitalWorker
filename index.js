@@ -42,7 +42,7 @@ app.use(fileUpload({ useTempFiles: true }));
 // app.use(helmet({ crossOriginEmbedderPolicy: false, originAgentCluster: true }));
 app.use(
   helmet({
-    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false,
   })
 );
 app.use(cors())
