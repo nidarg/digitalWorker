@@ -39,7 +39,18 @@ app.use(rateLimiter({
 app.use(express.json())
 app.use(fileUpload({ useTempFiles: true }));
 
-app.use(helmet())
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+      "default-src":[ "'self'" ],
+      "base-uri":[ "'self'" ],
+      "font-src":[ "'self'", "https:", "data:" ],
+      "frame-ancestors":[ "'self'" ],
+      "img-src":[ "'self'", "data:", "http://res.cloudinary.com"], 
+      "script-src":[ "'self'" ],
+      "script-src-attr":[ "'none'" ],
+      "style-src":[ "'self'", "https:", "'unsafe-inline'" ],
+  }
+}))
 app.use(cors())
 app.use(xss())
 
